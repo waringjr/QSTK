@@ -79,5 +79,23 @@ def printsim(dt_start,dt_end,ls_symbols,weights):
     print "Cumulative Return: ", cum_returns
 
 
+def opt_alloc(dt_start,dt_end,ls_symbols):
+    
+    #initialize store for max sharpe ratio and allocation
+    max_sharpe = -1
+    max_alloc = [0.0,0.0,0.0,0.0]
+    
+    for i in range(0,11):
+        for j in range(0,11-i):
+            for k in range(0,11-i-j):
+                for l in range(0,11-i-j-k):
+                    # is this allocation legal?
+                    if(i+j+k+l) == 10:
+                        alloc = [float(i)/10, float(j)/10, float(k)/10, float(l)/10]
+                        cum,daily,vol,sharpe = simulate(dt_start,dt_end,ls_symbols,alloc)
 
- #   print((np.std(na_rets,axis=0))*weights)
+                        if sharpe > max_sharpe:
+                            max_alloc = alloc
+                            max_sharpe = sharpe
+    return max_alloc
+                    
